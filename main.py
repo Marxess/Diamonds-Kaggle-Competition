@@ -19,6 +19,15 @@ from sklearn import preprocessing
 !kaggle competitions download -c diamonds-datamad1020-rev
 !tar -xzvf diamonds-datamad1020-rev.zip
 
+#Let's check for collinearity issues
+#Created a code to evaluate the collinearity between columns
+corr_matrix = train_data.corr().abs()
+upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool))
+to_drop = [column for column in upper.columns if any(upper[column] > 0.90)]
+
+train_data.drop(['x','y','z'], axis = 1, inplace = True)
+test_data.drop(['x','y','z'], axis = 1, inplace = True)
+
 #Modeling, Prediction, and Evaluation
 X = train_data.drop(['price'],1)
 y = train_data['price']
